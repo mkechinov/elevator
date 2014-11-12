@@ -10,6 +10,7 @@ Common attributes:
 
 * number_of_elevators (integer)
 * number_of_floors (integer)
+* floor_height (meters)
 * max_speed (float, meters/second)
 * acceleration (float, meters/second^2)
 * deceleration (float, meters/second^2)
