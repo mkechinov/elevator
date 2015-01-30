@@ -1,3 +1,5 @@
+PFont font;
+
 // Building settings
 int number_of_elevators = 5;
 int number_of_floors = 5;
@@ -6,7 +8,6 @@ Building building;
 
 // Display settings
 int _scale_meters_to_pixels = 20; // pixels
-float _margin = 20;
 
 // Elevator settings
 float max_speed = 3.0;
@@ -21,12 +22,10 @@ int maximum_person_weight = 110;
 int maximum_group_size = 12;
 
 void setup() {
-  
-  building = new Building(number_of_floors, number_of_elevators, floor_height);
-  
-  // Canvas 
-  size( int(scale_dimensions(building.width()) + _margin * 2), int(scale_dimensions(building.height()) + _margin * 2) );
-  
+  building = new Building(number_of_floors, number_of_elevators, floor_height); 
+  size( int(scale_dimensions(building.width()) ), int(scale_dimensions(building.height()) ) );
+  smooth();
+  font = createFont("Arial",16,true);
 }
 
 
@@ -54,7 +53,6 @@ class Building {
   int number_of_floors;
   int number_of_elevators;
   float floor_height;
-  int _offset_from_walls = 1; // meters
   Elevator[] elevators;
   
   
@@ -72,24 +70,22 @@ class Building {
   }
   
   float width() {
-    return number_of_elevators * floor_height + (number_of_elevators - 1) * _offset_from_walls + 2 * _offset_from_walls;
+    return number_of_elevators * floor_height;
   }
   
   float height() {
-    return 2 * _offset_from_walls + number_of_elevators * floor_height;
+    return number_of_elevators * floor_height;
   }
   
   void draw() {
-    
-    // Draw building
-    rectMode(CORNER);
-    stroke(127);
-    rect(_margin, _margin, scale_dimensions(this.width()), scale_dimensions(this.height()));
-    
+
     // Draw elevators
+    pushMatrix();
     for(int i = 0; i < this.elevators.length; i++) {
-      this.elevators[i].draw();  
+      this.elevators[i].draw(); 
+      translate(scale_dimensions(building.floor_height), 0);
     }
+    popMatrix();
     
   }
   
@@ -145,11 +141,11 @@ class Elevator {
     rectMode(CORNER);
     stroke(0);
     rect(
-      _margin + scale_dimensions( this.id * building.floor_height + (this.id + 1) * building._offset_from_walls ), 
-      _margin + scale_dimensions(building._offset_from_walls + (building.number_of_floors - 1 - current_floor) * building.floor_height ), // Minus 1 because floors numbers from 0 
+      0,
+      scale_dimensions((building.number_of_floors - 1 - current_floor) * building.floor_height ), // Minus 1 because floors numbers from 0 
       scale_dimensions(building.floor_height), 
       scale_dimensions(building.floor_height)
-    ); 
+    );
   }
   
 }
